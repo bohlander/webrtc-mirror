@@ -339,6 +339,10 @@
                 'app/webrtc/objc/RTCEAGLVideoView.m',
                 'app/webrtc/objc/public/RTCEAGLVideoView.h',
                 'app/webrtc/objc/public/RTCAVFoundationVideoSource.h',
+                'app/webrtc/objc/RTCSimpleFrameVideoSource.mm',
+                'app/webrtc/objc/public/RTCSimpleFrameVideoSource.h',
+                'app/webrtc/objc/simpleframevideocapturer.h',
+                'app/webrtc/objc/simpleframevideocapturer.mm',
               ],
               'link_settings': {
                 'xcode_settings': {

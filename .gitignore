@@ -50,6 +50,10 @@
 /links.db
 /net
 /out
+/out_ios_arm64_v8a
+/out_ios_armeabi_v7a
+/out_ios_x86
+/out_ios_x86_64
 /resources/**/*.aecdump
 /resources/**/*.bin
 /resources/**/*.chn
@@ -172,4 +176,3 @@
 /webrtc/video_engine/test/android/obj
 /x86-generic_out/
 /xcodebuild
-
