@@ -61,3 +61,8 @@
 }
 
 @end
+
+
+@implementation RTCSimpleVideoFrame
+
+@end
