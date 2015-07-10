@@ -35,10 +35,10 @@
 
 // TODO(tkchin): support other formats.
 static cricket::VideoFormat const kDefaultFormat =
-    cricket::VideoFormat(1280,
-                         720,
+    cricket::VideoFormat(640,
+                         360,
                          cricket::VideoFormat::FpsToInterval(30),
-                         cricket::FOURCC_J420);
+                         cricket::FOURCC_NV12);
 
 // This queue is used to start and stop the capturer without blocking the
 // calling thread.
@@ -109,7 +109,7 @@ void SimpleFrameVideoCapturer::CaptureSimpleFrame(RTCSimpleVideoFrame* simpleFra
   frame.height = simpleFrame.height;
   frame.pixel_width = simpleFrame.pixelWidth;
   frame.pixel_height = simpleFrame.pixelHeight;
-  frame.fourcc = simpleFrame.fourcc;
+  frame.fourcc = cricket::FOURCC_NV12;
   frame.time_stamp = currentTime;
   frame.elapsed_time = currentTime - _startTime;
 

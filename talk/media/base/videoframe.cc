@@ -258,6 +258,7 @@ bool VideoFrame::Validate(uint32 fourcc, int w, int h,
     case FOURCC_M420:
     case FOURCC_NV21:
     case FOURCC_NV12:
+    case FOURCC_J420:
       expected_bpp = 12;
       break;
     case FOURCC_I422:

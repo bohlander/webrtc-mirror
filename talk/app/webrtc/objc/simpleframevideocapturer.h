@@ -50,7 +50,7 @@ class SimpleFrameVideoCapturer : public cricket::VideoCapturer {
     return false;
   }
   bool GetPreferredFourccs(std::vector<uint32>* fourccs) override {
-    fourccs->push_back(cricket::FOURCC_J420);
+    fourccs->push_back(cricket::FOURCC_NV12);
     return true;
   }
 
