@@ -31,17 +31,24 @@
 @class RTCPeerConnectionFactory;
 @class RTCSimpleVideoFrame;
 
+@protocol RTCSimpleVideoSourceDelegate;
+
 // RTCSimpleFrameVideoSource is a video source that uses
 // webrtc::AVFoundationVideoCapturer. We do not currently provide a wrapper for
 // that capturer because cricket::VideoCapturer is not ref counted and we cannot
 // guarantee its lifetime. Instead, we expose its properties through the ref
 // counted video source interface.
 @interface RTCSimpleFrameVideoSource : RTCVideoSource
+@property(nonatomic, weak) id<RTCSimpleVideoSourceDelegate> delegate;
 
-- (instancetype)initWithFactory:(RTCPeerConnectionFactory*)factory
-                    constraints:(RTCMediaConstraints*)constraints;
+- (instancetype)initWithFactory:(RTCPeerConnectionFactory*)factory constraints:(RTCMediaConstraints*)constraints delegate:(id<RTCSimpleVideoSourceDelegate>)delegate;
 - (void)sendFrame:(RTCSimpleVideoFrame*)frame;
 
+@end
+
+@protocol RTCSimpleVideoSourceDelegate
+- (void)simpleFrameVideoSourceStopped;
+- (void)simpleFrameVideoSourceStarted;
 @end
 
 @interface RTCSimpleVideoFrame : NSObject
@@ -54,4 +61,11 @@
 @property(nonatomic, assign) int rotation;
 @property(nonatomic, strong) NSData* data;
 
+@end
+
+@interface RTCSimpleVideoFrameCapturerNotifier : NSObject
+@property(nonatomic, weak) id<RTCSimpleVideoSourceDelegate> delegate;
+
+- (void)notifyStarted;
+- (void)notifyStopped;
 @end

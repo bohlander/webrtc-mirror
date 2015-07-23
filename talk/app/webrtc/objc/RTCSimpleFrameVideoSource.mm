@@ -36,10 +36,13 @@
 @implementation RTCSimpleFrameVideoSource
 
 - (instancetype)initWithFactory:(RTCPeerConnectionFactory*)factory
-                    constraints:(RTCMediaConstraints*)constraints {
+                    constraints:(RTCMediaConstraints*)constraints
+                    delegate:(id<RTCSimpleVideoSourceDelegate>)delegate {
   NSParameterAssert(factory);
   rtc::scoped_ptr<webrtc::SimpleFrameVideoCapturer> capturer;
   capturer.reset(new webrtc::SimpleFrameVideoCapturer());
+  capturer->notifier().delegate = delegate;
+
   rtc::scoped_refptr<webrtc::VideoSourceInterface> source =
       factory.nativeFactory->CreateVideoSource(capturer.release(),
                                                constraints.constraints);
@@ -60,9 +63,44 @@
   [self capturer]->CaptureSimpleFrame(frame);
 }
 
+- (void)setDelegate:(id<RTCSimpleVideoSourceDelegate>)delegate
+{
+  RTCSimpleVideoFrameCapturerNotifier* notifier = [self capturer]->notifier();
+  if (notifier) {
+    notifier.delegate = delegate;
+  }
+}
+
 @end
 
 
 @implementation RTCSimpleVideoFrame
 
+@end
+
+@interface RTCSimpleVideoFrameCapturerNotifier()
+@property(nonatomic, strong) dispatch_queue_t notifyQueue;
+@end
+
+@implementation RTCSimpleVideoFrameCapturerNotifier
+- (id)init
+{
+  if ((self = [super init])) {
+    self.notifyQueue = dispatch_queue_create("com.google.webrtc.RTCSimpleVideoFrameCapturerNotifier", DISPATCH_QUEUE_SERIAL);
+  }
+  return self;
+}
+- (void)notifyStarted
+{
+  dispatch_async(self.notifyQueue, ^{
+    [self.delegate simpleFrameVideoSourceStarted];
+  });
+}
+
+- (void)notifyStopped
+{
+  dispatch_async(self.notifyQueue, ^{
+    [self.delegate simpleFrameVideoSourceStopped];
+  });
+}
 @end

@@ -126,7 +126,7 @@
 
     # Enable this to use HW H.264 encoder/decoder on iOS/Mac PeerConnections.
     # Enabling this may break interop with Android clients that support H264.
-    'use_objc_h264%': 0,
+    'use_objc_h264%': 1,
 
     'conditions': [
       ['build_with_chromium==1', {
@@ -452,4 +452,3 @@
     },
   }, # target_defaults
 }
-

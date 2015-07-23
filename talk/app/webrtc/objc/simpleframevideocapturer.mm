@@ -40,21 +40,20 @@ static cricket::VideoFormat const kDefaultFormat =
                          cricket::VideoFormat::FpsToInterval(30),
                          cricket::FOURCC_NV12);
 
-// This queue is used to start and stop the capturer without blocking the
-// calling thread.
-static dispatch_queue_t kBackgroundQueue = nil;
-
 namespace webrtc {
 
 SimpleFrameVideoCapturer::SimpleFrameVideoCapturer() : _startThread(nullptr), _startTime(0) {
+  _notifier = [[RTCSimpleVideoFrameCapturerNotifier alloc] init];
+
   // Set our supported formats. This matches kDefaultPreset.
   std::vector<cricket::VideoFormat> supportedFormats;
   supportedFormats.push_back(cricket::VideoFormat(kDefaultFormat));
   SetSupportedFormats(supportedFormats);
 }
 
-SimpleFrameVideoCapturer::~SimpleFrameVideoCapturer() {
-
+SimpleFrameVideoCapturer::~SimpleFrameVideoCapturer()
+{
+  _notifier = nil;
 }
 
 cricket::CaptureState SimpleFrameVideoCapturer::Start(
@@ -81,6 +80,8 @@ cricket::CaptureState SimpleFrameVideoCapturer::Start(
 
   _isRunning = true;
 
+  [_notifier notifyStarted];
+
   return cricket::CaptureState::CS_STARTING;
 }
 
@@ -88,6 +89,8 @@ void SimpleFrameVideoCapturer::Stop() {
   SetCaptureFormat(NULL);
   _startThread = nullptr;
   _isRunning = false;
+
+  [_notifier notifyStopped];
 }
 
 bool SimpleFrameVideoCapturer::IsRunning() {
