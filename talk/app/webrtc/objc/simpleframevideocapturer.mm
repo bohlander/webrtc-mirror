@@ -42,8 +42,7 @@ static cricket::VideoFormat const kDefaultFormat =
 
 namespace webrtc {
 
-SimpleFrameVideoCapturer::SimpleFrameVideoCapturer() : _startThread(nullptr), _startTime(0) {
-  _notifier = [[RTCSimpleVideoFrameCapturerNotifier alloc] init];
+SimpleFrameVideoCapturer::SimpleFrameVideoCapturer() : _startThread(nullptr), _startTime(0), _isRunning(false) {
 
   // Set our supported formats. This matches kDefaultPreset.
   std::vector<cricket::VideoFormat> supportedFormats;
@@ -53,7 +52,7 @@ SimpleFrameVideoCapturer::SimpleFrameVideoCapturer() : _startThread(nullptr), _s
 
 SimpleFrameVideoCapturer::~SimpleFrameVideoCapturer()
 {
-  _notifier = nil;
+
 }
 
 cricket::CaptureState SimpleFrameVideoCapturer::Start(
@@ -80,8 +79,6 @@ cricket::CaptureState SimpleFrameVideoCapturer::Start(
 
   _isRunning = true;
 
-  [_notifier notifyStarted];
-
   return cricket::CaptureState::CS_STARTING;
 }
 
@@ -89,8 +86,6 @@ void SimpleFrameVideoCapturer::Stop() {
   SetCaptureFormat(NULL);
   _startThread = nullptr;
   _isRunning = false;
-
-  [_notifier notifyStopped];
 }
 
 bool SimpleFrameVideoCapturer::IsRunning() {

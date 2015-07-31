@@ -60,15 +60,10 @@ class SimpleFrameVideoCapturer : public cricket::VideoCapturer {
   // frame for capture.
   void CaptureSimpleFrame(RTCSimpleVideoFrame* frame);
 
-  RTCSimpleVideoFrameCapturerNotifier* notifier() {
-    return _notifier;
-  }
-  
  private:
   // Used to signal frame capture on the thread that capturer was started on.
   void SignalFrameCapturedOnStartThread(const cricket::CapturedFrame* frame);
 
-  RTCSimpleVideoFrameCapturerNotifier* _notifier;
   rtc::Thread* _startThread;  // Set in Start(), unset in Stop().
   uint64_t _startTime;
   bool _isRunning;
