@@ -1141,6 +1141,10 @@ int32_t AudioDeviceIOS::InitPlayOrRecord() {
     WEBRTC_TRACE(kTraceModuleCall, kTraceAudioDevice, _id, "%s", __FUNCTION__);
 
     OSStatus result = -1;
+    
+    // rayray: shortcircuit audio initialization for use inside our application
+    // there is probably a cleaner way to do this, but this works for now.
+    return result;
 
     // Check if already initialized
     if (NULL != _auVoiceProcessing) {
